@@ -164,11 +164,11 @@ func execCommand(portCreatorArg IoPortCreator, cmd string) (string, error) {
 		}
 	}()
 	select {
-	case res := <- ch:
+	case res := <-ch:
 		lines := strings.Split(res, "\n")
 		filteredLines := lines[1 : len(lines)-1]
 		return strings.Join(filteredLines, "\n"), nil
-	case err := <- errch:
+	case err := <-errch:
 		return "", err
 	case <-ctx.Done():
 		return "", fmt.Errorf("Command timeout: %s", cmd)

@@ -1,9 +1,9 @@
 package pkg
 
 type Env struct {
-	Temperature float64 `json:"temperature"`
-	Humidity    float64 `json:"humidity"`
-	Brightness  float64 `json:"brightness"`
+	Temperature float64
+	Humidity    float64
+	Brightness  float64
 }
 
 type IrData struct {

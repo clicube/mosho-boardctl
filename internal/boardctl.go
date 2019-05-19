@@ -1,13 +1,20 @@
 package internal
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"strconv"
-	"encoding/json"
 
 	"mosho-boardctl/pkg"
 )
+
+type jsonEnv struct {
+	Result      string  `json:"result"`
+	Temperature float64 `json:"temperature"`
+	Humidity    float64 `json:"humidity"`
+	Brightness  float64 `json:"brightness"`
+}
 
 func Exec() (string, error) {
 	flag.Parse()
@@ -49,9 +56,16 @@ func invokeEnv() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
-	jsonb, _ := json.Marshal(env)
-	
+
+	jenv := &jsonEnv{
+		Result: "ok",
+		Temperature: env.Temperature,
+		Humidity: env.Humidity,
+		Brightness: env.Brightness,
+	}
+
+	jsonb, _ := json.Marshal(jenv)
+
 	return string(jsonb), nil
 }
 
@@ -64,7 +78,7 @@ func invokeCmd(intervalStr string, pattern string) (string, error) {
 
 	data := &pkg.IrData{
 		Interval: interval,
-		Pattern: pattern,
+		Pattern:  pattern,
 	}
 
 	board, err := pkg.NewBoard(nil)
@@ -76,6 +90,6 @@ func invokeCmd(intervalStr string, pattern string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	return "{\"result\":\"ok\"}", nil
 }
