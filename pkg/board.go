@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -106,7 +107,12 @@ func lock() (*flock.Flock, error) {
 }
 
 func unlock(fileLock *flock.Flock) error {
-	return fileLock.Unlock()
+	err := fileLock.Unlock()
+	if err != nil {
+		return err
+	}
+	err = os.Remove(lockFilePath)
+	return err
 }
 
 func execCommand(portCreatorArg IoPortCreator, cmd string) (string, error) {

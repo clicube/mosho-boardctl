@@ -13,12 +13,12 @@ test:
 	go test ./...
 
 remote-copy: build
-	ssh raspi "mkdir -p ~/services/mosho-boardctl/bin"
-	scp ./bin/boardctl raspi:services/mosho-boardctl/bin
+	scp ./bin/boardctl rpi1b:~/boardctl
+	ssh rpi1b "sudo sh -c \"mkdir -p /opt/mosho-boardctl && mv boardctl /opt/mosho-boardctl\" && rm boardctl"
 
 remote-env: remote-copy
-	ssh raspi "cd services/mosho-boardctl/bin && ./boardctl env"
+	ssh rpi1b "/opt/mosho-boardctl/boardctl env"
 
 remote-cmd: remote-copy
-	ssh raspi "cd services/mosho-boardctl/bin && ./boardctl cmd"
+	ssh rpi1b "/opt/mosho-boardctl/boardctl cmd"
 
